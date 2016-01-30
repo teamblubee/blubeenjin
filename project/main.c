@@ -8,7 +8,9 @@ void init(void) {
 
 }
 
-void fixed_update(void) {}
+void fixed_update(void) {
+
+}
 
 void variable_update(double alpha) {}
 
@@ -17,15 +19,25 @@ void variable_render(double alpha) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
-void resize(int w, int h) {}
+void resize(int w, int h) {
 
-void pause(void) {}
+}
 
-void resume(void) { free(ptrs); }
+void pause(void) {
 
-void handle_events(key_event* e) {}
+}
 
-void quit(void) {}
+void resume(void) { 
+    free(ptrs);
+}
+
+void handle_events(key_event* e) {
+
+}
+
+void quit(void) {
+
+}
 
 int main(int argv, char* argc[]) {
     ptrs = (lifecycle_ptrs*)calloc(1, sizeof(lifecycle_ptrs));
