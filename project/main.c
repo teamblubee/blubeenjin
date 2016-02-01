@@ -28,7 +28,6 @@ void pause(void) {
 }
 
 void resume(void) { 
-    free(ptrs);
 }
 
 void handle_events(key_event* e) {
@@ -36,11 +35,11 @@ void handle_events(key_event* e) {
 }
 
 void quit(void) {
-
+    free(ptrs);
 }
 
 int main(int argv, char* argc[]) {
-    ptrs = (lifecycle_ptrs*)calloc(1, sizeof(lifecycle_ptrs));
+    ptrs = calloc(1, sizeof(lifecycle_ptrs));
     ptrs->init_func_ptr = &init;
     ptrs->fixed_update_func_ptr = &fixed_update;
     ptrs->variable_update_func_ptr = &variable_update;
