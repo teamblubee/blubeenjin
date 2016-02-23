@@ -5,7 +5,7 @@ SET(SRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/resource_utils.c)
 
 SET(TARGET_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/headers")
 
-SET(TARGET_LIBS vertex_layout core_math)
+SET(TARGET_LIBS core_math)
 
 use_c99()
 
