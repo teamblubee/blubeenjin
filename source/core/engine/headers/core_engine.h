@@ -4,6 +4,7 @@
 #include "glad.h"
 #include <GLFW/glfw3.h>
 #include "vectormath_aos.h"
+#include "vertex_layout.h"
 
 typedef struct {
     GLFWwindow *k_window;
@@ -38,6 +39,5 @@ int ce_get_window_height(void);
 void ce_resume(void);
 void ce_pause(void);
 void ce_quit(void);
-
 
 #endif /* CORE_ENGINE_H */

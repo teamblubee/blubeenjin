@@ -5,7 +5,13 @@ float width, height;
 lifecycle_ptrs* ptrs;
 
 void init(void) {
+    vertex_layout *l2 = vertex_layout_new_ptr();
+    vertex_layout_pushback(l2, vertex_attribute_new(POSITION, 3));
+    vertex_layout_pushback(l2, vertex_attribute_new(TEXCOORD0, 3));
 
+    printf("0: %s\n",vertex_layout_getattributestring(l2, 0));
+    printf("1: %s\n",vertex_layout_getattributestring(l2, 1));
+    vertex_layout_cleanup(l2);
 }
 
 void fixed_update(void) {
