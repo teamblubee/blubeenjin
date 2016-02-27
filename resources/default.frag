@@ -10,6 +10,6 @@ float cutoff = 0.1;
 
 void main (void)
 {
-    //o_color = f_color;
-    o_color = f_color * texture(u_sprite_tex, f_tex);
+    o_color = f_color;
+    //o_color = f_color * texture(u_sprite_tex, f_tex);
 }

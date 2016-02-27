@@ -5,6 +5,8 @@
 #include <GLFW/glfw3.h>
 #include "vectormath_aos.h"
 #include "vertex_layout.h"
+#include "mesh.h"
+#include "shader.h"
 
 typedef struct {
     GLFWwindow *k_window;

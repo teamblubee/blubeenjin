@@ -51,7 +51,7 @@ char* get_resource(char** res, const char* filename) {
     return *res;
 }
 
-char* read_file(char** data, const char* file_path) {
+const char* read_file(char** data, const char* file_path) {
     FILE* fp;
     size_t buffer = 4096;
     size_t index = 0;

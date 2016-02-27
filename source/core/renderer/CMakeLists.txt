@@ -1,2 +1,3 @@
 ADD_SUBDIRECTORY(vertex_layout)
 ADD_SUBDIRECTORY(mesh)
+ADD_SUBDIRECTORY(shader)
