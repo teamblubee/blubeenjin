@@ -44,16 +44,23 @@ void vertex_attribute_cleanup(vertex_attribute* a);
 
 vertex_layout* vertex_layout_new_packed_ptr(vertex_attribute** a, size_t count);
 vertex_layout* vertex_layout_new_ptr(void);
-vertex_layout vertex_layout_new(void);
 
 vertex_layout* vertex_layout_pushback_ptr(vertex_layout* l,
                                           vertex_attribute* a);
 vertex_layout* vertex_layout_pushback(vertex_layout* l, vertex_attribute a);
+vertex_layout* vertex_layout_copy(vertex_layout* out, vertex_layout* in);
+vertex_layout* vertex_layout_duplicate(vertex_layout* in);
+
+void vertex_layout_copy_vertex_attributes(vertex_layout** to,
+                                          vertex_attribute* from, size_t index);
 
 vertex_attribute* vertex_layout_getattribute(vertex_layout* in, size_t index);
 char* vertex_layout_getattributestring(vertex_layout* in, size_t index);
 vertex_attribute_type vertex_layout_getattributetype(vertex_layout* in,
                                                      size_t index);
+
+void vertex_layout_print(vertex_layout* in);
+void vertex_layout_print_s(vertex_layout* in, char* tag);
 void vertex_layout_cleanup(vertex_layout* l);
 
 #endif /* VERTEX_LAYOUT_H */
