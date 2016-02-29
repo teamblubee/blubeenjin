@@ -23,8 +23,6 @@ GLuint single_quad_vao;
 GLint pos_loc = -1;
 GLint col_loc = -1;
 
-
-
 void init(void) {
     // shader --
     // mesh --
@@ -35,45 +33,23 @@ void init(void) {
     vertex_attribute pos = vertex_attribute_new(POSITION, 3);
     vertex_attribute col = vertex_attribute_new(POSITION, 4);
 
-    vertex_layout* flat_quad = vertex_layout_new_ptr();
-    vertex_layout_pushback(flat_quad, &pos);
-    vertex_layout_pushback(flat_quad, &col);
+    vertex_layout* flat_quad_vertex_layout = vertex_layout_new_ptr();
+    vertex_layout_pushback(flat_quad_vertex_layout, &pos);
+    vertex_layout_pushback(flat_quad_vertex_layout, &col);
 
-    quad = mesh_new_ptr(STATIC, TRIANGLES, flat_quad);
-    vertex_layout_cleanup(flat_quad);
+    quad = mesh_new_ptr(STATIC, TRIANGLES, flat_quad_vertex_layout);
+    vertex_layout_cleanup(flat_quad_vertex_layout);
 
-    mesh_set_vertex_data(quad, v_data, (sizeof(v_data)/sizeof(v_data[0])));
-    mesh_set_index_data(quad, i_data, (sizeof(i_data)/sizeof(i_data[0])));
+    mesh_set_vertex_data(quad, v_data, (sizeof(v_data) / sizeof(v_data[0])));
+    mesh_set_index_data(quad, i_data, (sizeof(i_data) / sizeof(i_data[0])), 6);
 
-    printf("total size:%zu bytes\n",mesh_get_vertex_sizebytes(quad));
+    mesh_bind_vertex_data(quad);
+    mesh_bind_index_data(quad);
 
-    shader = shader_create_from_file("default.vert", "default.frag");
+    shader = shader_create_from_file("flat_primitive.vert", "flat_primitive.frag");
 
     pos_loc = shader_get_attribute_location(shader, "a_pos");
     col_loc = shader_get_attribute_location(shader, "a_col");
-
-    glGenVertexArrays(1, &single_quad_vao);
-    glBindVertexArray(single_quad_vao);
-
-    glBindBuffer(GL_ARRAY_BUFFER, mesh_get_vertex_buffer_handle(quad));
-    glBufferData(GL_ARRAY_BUFFER, mesh_get_vertex_count(quad),
-                 mesh_get_vertex_data(quad), GL_STREAM_DRAW);
-
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float),
-                          (GLvoid*)0);
-
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 7 * sizeof(float),
-                          (GLvoid*)(3 * sizeof(float)));
-
-    glBindBuffer(GL_ARRAY_BUFFER, mesh_get_index_buffer_handle(quad));
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh_get_index_count(quad),
-                 mesh_get_index_data(quad), GL_STREAM_DRAW);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
 }
 
 void fixed_update(void) {}
@@ -85,7 +61,7 @@ void variable_render(double alpha) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     shader_bind_program(shader);
-    glBindVertexArray(single_quad_vao);
+    glBindVertexArray(quad->mesh_vao_handle);
 
     glBindBuffer(GL_ARRAY_BUFFER, mesh_get_vertex_buffer_handle(quad));
     glBufferData(GL_ARRAY_BUFFER, mesh_get_vertex_sizebytes(quad),
@@ -95,7 +71,8 @@ void variable_render(double alpha) {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh_get_index_sizebytes(quad),
                  mesh_get_index_data(quad), GL_STREAM_DRAW);
 
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, 0);
+    glDrawElements(GL_TRIANGLES, mesh_get_element_count(quad),
+                   GL_UNSIGNED_SHORT, 0);
 }
 
 void resize(int w, int h) {}

@@ -116,6 +116,8 @@ vertex_layout* vertex_layout_new_ptr(void) {
     vertex_layout* out = calloc(1, sizeof(vertex_layout));
     out->vertex_layout_attributes = calloc(1, sizeof(vertex_attribute*));
     out->vertex_layout_attribute_sizebytes = 0;
+    out->vertex_layout_attribute_combined_count = 0;
+    out->vertex_layout_attribute_combined_count = 0;
     out->vertex_layout_attribute_count = 0;
     return out;
 }
@@ -128,6 +130,7 @@ vertex_layout* vertex_layout_pushback(vertex_layout* l, vertex_attribute* a) {
     l->vertex_layout_attributes[count] = calloc(1, sizeof(vertex_attribute*));
     copy_vertex_attribute(l->vertex_layout_attributes[count], a);
     l->vertex_layout_attribute_count++;
+    l->vertex_layout_attribute_combined_count += a->vertex_attribute_count;
     l->vertex_layout_attribute_sizebytes += a->vertex_attribute_sizebytes;
     return l;
 }
@@ -163,7 +166,8 @@ vertex_layout** vertex_layout_duplicate(vertex_layout** to,
     ;
     memcpy(&(*to)->vertex_layout_attribute_count,
            &(*from)->vertex_layout_attribute_count, sizeof(size_t));
-
+    memcpy(&(*to)->vertex_layout_attribute_combined_count,
+           &(*from)->vertex_layout_attribute_combined_count, sizeof(size_t));
     return to;
 }
 

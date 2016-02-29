@@ -25,6 +25,7 @@ typedef struct {
 typedef struct {
     vertex_attribute** vertex_layout_attributes;
     size_t vertex_layout_attribute_count;
+    size_t vertex_layout_attribute_combined_count;
     size_t vertex_layout_attribute_sizebytes;
 } vertex_layout;
 
