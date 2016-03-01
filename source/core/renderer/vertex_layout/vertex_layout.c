@@ -3,25 +3,25 @@
 static char* va_getstring(vertex_attribute_type* t) {
     switch (*t) {
         case POSITION:
-            return "Position";
+            return "a_pos";
             break;
         case COLOR:
-            return "Color";
+            return "a_col";
             break;
         case NORMAL:
-            return "Normal";
+            return "a_norm";
             break;
         case TEXCOORD0:
-            return "TexCoord0";
+            return "u_tex0";
             break;
         case TEXCOORD1:
-            return "TexCoord1";
+            return "u_tex1";
             break;
         case TEXCOORD2:
-            return "TexCoord2";
+            return "u_tex2";
             break;
         case TEXCOORD3:
-            return "TexCoord3";
+            return "u_tex3";
             break;
     }
 }
