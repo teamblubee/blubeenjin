@@ -25,9 +25,6 @@ typedef struct {
     vertex_layout* vertex_layout;
     mesh_draw_mode draw_mode;
     mesh_primitive_type primitive_type;
-    GLuint vertex_buffer_handle;
-    GLuint index_buffer_handle;
-    GLuint mesh_vao_handle;
     size_t vert_attrib_count;
     float* vertex_data;
     short* index_data;
@@ -54,8 +51,6 @@ size_t mesh_get_vertex_stride(mesh* in);
 size_t mesh_get_element_count(mesh* in);
 short* mesh_get_index_data(mesh* in);
 float* mesh_get_vertex_data(mesh* in);
-GLuint mesh_get_vertex_buffer_handle(mesh* in);
-GLuint mesh_get_index_buffer_handle(mesh* in);
 
 mesh_draw_mode mesh_get_draw_mode(mesh* in);
 mesh_primitive_type mesh_get_primitive_type(mesh* in);

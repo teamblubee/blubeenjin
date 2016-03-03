@@ -7,6 +7,7 @@
 #include "vertex_layout.h"
 #include "mesh.h"
 #include "shader.h"
+#include "sprite.h"
 
 typedef struct {
     GLFWwindow *k_window;
