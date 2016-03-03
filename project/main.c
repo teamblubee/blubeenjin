@@ -35,7 +35,7 @@ void variable_render(double alpha) {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     shader_bind_program(shader);
-    sprite_render_bind(q_sprite);
+    sprite_bind_render(q_sprite);
 }
 
 void resize(int w, int h) {}
