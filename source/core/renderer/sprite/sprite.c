@@ -1,9 +1,9 @@
 #include "sprite.h"
 
-float v_data[] = {-0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-		  -0.5f, 0.5f,  0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f,
-		  0.5f,  0.5f,  0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-		  0.5f,  -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f};
+float v_data[] = {-1.0f, -1.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+		  -1.0f, 1.0f,  0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f,
+		  1.0f,  1.0f,  0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+		  1.0f,  -1.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f};
 
 short i_data[] = {0, 1, 2, 0, 2, 3};
 
@@ -71,16 +71,16 @@ sprite* sprite_new_ptr(texture* t, float x, float y) {
 
     vertex_layout_cleanup(sprite_vl);
 
-    vmathV3MakeFromElems(&out->scale, t->width, t->height, 1);
+    vmathV3MakeFromElems(&out->scale, t->width*0.5f, t->height*0.5f, 1);
     vmathM4SetElem(&out->model_mat, 0, 0, out->scale.x);
     vmathM4SetElem(&out->model_mat, 1, 1, out->scale.y);
     vmathM4SetElem(&out->model_mat, 2, 2, 1);
     vmathM4SetElem(&out->model_mat, 3, 3, 1);
     // vmathM4MakeScale(&out->model_mat, &out->scale);
 
-    vmathM4SetElem(&out->model_mat, 3, 0, (-out->scale.x * 0.5f) - (x));
-    vmathM4SetElem(&out->model_mat, 3, 1, (out->scale.y * 0.5f) + (y));
-    // vmathM4Prints(&out->model_mat, "model");
+    vmathM4SetElem(&out->model_mat, 3, 0, (-out->scale.x) - (x));
+    vmathM4SetElem(&out->model_mat, 3, 1, (out->scale.y) + (y));
+    vmathM4Prints(&out->model_mat, "model");
 
     bind_vertex_data(out);
     bind_index_data(out);

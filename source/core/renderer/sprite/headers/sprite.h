@@ -9,9 +9,9 @@
 typedef struct {
     mesh* sprite_mesh;
     mat4 model_mat;
-    vec3 pos;
-    vec3 rot;
-    vec3 scale;
+    vec3 p_pos,pos;
+    vec3 p_rot,rot;
+    vec3 p_scale,scale;
     GLuint texture_id;
     GLuint vertex_buffer_handle;
     GLuint index_buffer_handle;

@@ -13,19 +13,19 @@ mat4 v_mat, p_mat;
 int l, r, u, d;
 image* dino;
 texture* dtex;
+float al = 0.0f;
 
 void init(void) {
     // shader --
     // mesh --
-    // image
-    // texture2d
-    //
+    // image --
+    // texture2d --
 
     dino = image_new_ptr("dino.png");
     image_cleanup(dino);
 
     dtex = texture_new_ptr("dino.png");
-    //dtex = texture_new_ptr("dino2.jpg");
+    // dtex = texture_new_ptr("dino2.jpg");
     // texture_cleanup(dtex);
 
     q_sprite = sprite_new_ptr(dtex, width * 0.5, height * 0.5);
@@ -86,7 +86,9 @@ void fixed_update(void) {
     }
 }
 
-void variable_update(double alpha) {}
+void variable_update(double alpha) {
+	al = alpha;
+}
 
 void variable_render(double alpha) {
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
@@ -106,7 +108,7 @@ void variable_render(double alpha) {
     glActiveTexture(GL_TEXTURE0);
     glUniform1i(tex_loc, 0);
     glBindTexture(GL_TEXTURE_2D, q_sprite->texture_id);
-    //printf("tex:%d\n", tex_loc);
+    // printf("tex:%d\n", tex_loc);
 
     // vmathM4Prints(&p_mat, "proj");
     // vmathM4Prints(&v_mat, "view");
@@ -136,7 +138,7 @@ void handle_events(key_event* e) {
 	if (e->k_key == GLFW_KEY_DOWN) {
 	    d = 1;
 	}
-    } 
+    }
 
     if (e->k_action == GLFW_RELEASE) {
 	if (e->k_key == GLFW_KEY_LEFT) {
@@ -151,14 +153,13 @@ void handle_events(key_event* e) {
 	if (e->k_key == GLFW_KEY_DOWN) {
 	    d = -1;
 	}
-	//l = r = u = d = -1;
-	// printf("released\n");
     }
 }
 
 void quit(void) {
     sprite_cleanup(q_sprite);
     shader_cleanup(shader);
+    texture_cleanup(dtex);
     free(ptrs);
 }
 
