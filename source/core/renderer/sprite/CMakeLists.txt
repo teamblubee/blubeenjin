@@ -5,7 +5,7 @@ SET(SRC_FILES ${CMAKE_CURRENT_SOURCE_DIR}/sprite.c)
 
 SET(TARGET_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/headers" "${CMAKE_SOURCE_DIR}/source/core/renderer/vertex/headers")
 
-SET(TARGET_LIBS core_math mesh texture)
+SET(TARGET_LIBS core_math mesh texture shader)
 
 use_c99()
 

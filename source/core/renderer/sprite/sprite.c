@@ -48,6 +48,7 @@ static void bind_index_data(sprite* out) {
 sprite* sprite_new_ptr(texture* t, float x, float y) {
     sprite* out = calloc(1, sizeof(sprite));
     out->texture_id = t->texture_id;
+    out->z_index = 0;
 
     glGenBuffers(1, &out->sprite_mesh_vao_handle);
     glGenBuffers(1, &out->vertex_buffer_handle);
@@ -71,16 +72,15 @@ sprite* sprite_new_ptr(texture* t, float x, float y) {
 
     vertex_layout_cleanup(sprite_vl);
 
-    vmathV3MakeFromElems(&out->scale, t->width*0.5f, t->height*0.5f, 1);
+    vmathV3MakeFromElems(&out->scale, t->width * 0.5f, t->height * 0.5f, 1);
     vmathM4SetElem(&out->model_mat, 0, 0, out->scale.x);
     vmathM4SetElem(&out->model_mat, 1, 1, out->scale.y);
     vmathM4SetElem(&out->model_mat, 2, 2, 1);
     vmathM4SetElem(&out->model_mat, 3, 3, 1);
     // vmathM4MakeScale(&out->model_mat, &out->scale);
-
     vmathM4SetElem(&out->model_mat, 3, 0, (-out->scale.x) - (x));
     vmathM4SetElem(&out->model_mat, 3, 1, (out->scale.y) + (y));
-    vmathM4Prints(&out->model_mat, "model");
+    // vmathM4Prints(&out->model_mat, "model");
 
     bind_vertex_data(out);
     bind_index_data(out);
@@ -96,7 +96,22 @@ GLuint sprite_get_index_buffer_handle(sprite* in) {
     return in->index_buffer_handle;
 }
 
-void sprite_bind_render(sprite* out) {
+sprite* sprite_set_z_index(sprite* out, int index) {
+   out->z_index = index;
+   return out;
+}
+
+sprite* sprite_set_position(sprite* out, float x, float y) {
+    vmathV3Copy(&out->p_pos, &out->pos);
+    vmathV3MakeFromElems(&out->pos, x, y, out->z_index);
+    return out;
+}
+
+void sprite_bind_render(sprite* out, shader_fx* s, GLuint tex_loc) {
+    shader_bind_program(s);
+    glActiveTexture(GL_TEXTURE0);
+    glUniform1i(tex_loc, 0);
+
     glBindVertexArray(out->sprite_mesh_vao_handle);
 
     glActiveTexture(GL_TEXTURE0);

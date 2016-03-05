@@ -5,6 +5,7 @@
 #include "mesh.h"
 #include "vectormath_aos.h"
 #include "texture.h"
+#include "shader.h"
 
 typedef struct {
     mesh* sprite_mesh;
@@ -12,6 +13,7 @@ typedef struct {
     vec3 p_pos,pos;
     vec3 p_rot,rot;
     vec3 p_scale,scale;
+    int z_index;
     GLuint texture_id;
     GLuint vertex_buffer_handle;
     GLuint index_buffer_handle;
@@ -21,7 +23,9 @@ typedef struct {
 sprite* sprite_new_ptr(texture *t, float x, float y);
 GLuint sprite_get_vertex_buffer_handle(sprite* in);
 GLuint sprite_get_index_buffer_handle(sprite* in);
-void sprite_bind_render(sprite* out);
+sprite* sprite_set_z_index(sprite* out, int index);
+sprite* sprite_set_position(sprite* out, float x, float y);
+void sprite_bind_render(sprite* out, shader_fx* s, GLuint tex_loc);
 void sprite_cleanup(sprite* in);
 
 #endif /* SPRITE_H */
