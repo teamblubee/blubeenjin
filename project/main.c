@@ -7,12 +7,12 @@ lifecycle_ptrs* ptrs;
 sprite* q_sprite;
 shader_fx* shader;
 
-GLint m_mat_loc, v_mat_loc, p_mat_loc;
+GLint m_mat_loc, v_mat_loc, p_mat_loc, tex_loc;
 mat4 v_mat, p_mat;
 
 int l, r, u, d;
-image *dino;
-texture *dtex;
+image* dino;
+texture* dtex;
 
 void init(void) {
     // shader --
@@ -25,9 +25,10 @@ void init(void) {
     image_cleanup(dino);
 
     dtex = texture_new_ptr("dino.png");
-    texture_cleanup(dtex);
+    //dtex = texture_new_ptr("dino2.jpg");
+    // texture_cleanup(dtex);
 
-    q_sprite = sprite_new_ptr(100, 100, 120, 120);
+    q_sprite = sprite_new_ptr(dtex, width * 0.5, height * 0.5);
 
     shader = shader_create_from_file("default.vert", "default.frag");
 
@@ -37,50 +38,51 @@ void init(void) {
     vmathP3MakeFromElems(&center, 0, 0, -1);
     vmathV3MakeFromElems(&up, 0, 1, 0);
     vmathM4MakeLookAt(&v_mat, &eye, &center, &up);
-    //vmathM4SetElem(&v_mat, 3, 0, width * 0.5f);
-    //vmathM4SetElem(&v_mat, 3, 1, height * 0.5f);
-    //vmathM4SetElem(&v_mat, 3, 2, -20);
-    //vmathM4Prints(&v_mat, "view");
+    // vmathM4SetElem(&v_mat, 3, 0, width * 0.5f);
+    // vmathM4SetElem(&v_mat, 3, 1, height * 0.5f);
+    // vmathM4SetElem(&v_mat, 3, 2, -20);
+    // vmathM4Prints(&v_mat, "view");
     vmathM4MakeOrthographic(&p_mat, 0, width, 0, height, 1, 100);
     glViewport(0, width, 0, -height);
 
     m_mat_loc = shader_get_uniform_location(shader, "u_mod_mat");
     v_mat_loc = shader_get_uniform_location(shader, "u_view_mat");
     p_mat_loc = shader_get_uniform_location(shader, "u_proj_mat");
+    tex_loc = shader_get_uniform_location(shader, "u_sprite_tex");
 }
 
 void fixed_update(void) {
     if (l == 1) {
-        //float x = vmathM4GetElem(&v_mat, 3, 0);
-        float x = vmathM4GetElem(&q_sprite->model_mat, 3, 0);
-        x += 10.1;
-        //vmathM4SetElem(&v_mat, 3, 0, x);
-        vmathM4SetElem(&q_sprite->model_mat, 3, 0, x);
-        // printf("x:%f\n",x);
+	// float x = vmathM4GetElem(&v_mat, 3, 0);
+	float x = vmathM4GetElem(&q_sprite->model_mat, 3, 0);
+	x += 10.1;
+	// vmathM4SetElem(&v_mat, 3, 0, x);
+	vmathM4SetElem(&q_sprite->model_mat, 3, 0, x);
+	// printf("x:%f\n",x);
     }
     if (r == 1) {
-        //float x = vmathM4GetElem(&v_mat, 3, 0);
-        float x = vmathM4GetElem(&q_sprite->model_mat, 3, 0);
-        x -= 10.1;
-        //vmathM4SetElem(&v_mat, 3, 0, x);
-        vmathM4SetElem(&q_sprite->model_mat, 3, 0, x);
-        // printf("x:%f\n",x);
+	// float x = vmathM4GetElem(&v_mat, 3, 0);
+	float x = vmathM4GetElem(&q_sprite->model_mat, 3, 0);
+	x -= 10.1;
+	// vmathM4SetElem(&v_mat, 3, 0, x);
+	vmathM4SetElem(&q_sprite->model_mat, 3, 0, x);
+	// printf("x:%f\n",x);
     }
     if (u == 1) {
-        //float y = vmathM4GetElem(&v_mat, 3, 1);
-        float y = vmathM4GetElem(&q_sprite->model_mat, 3, 1);
-        y += 10.1;
-        //vmathM4SetElem(&v_mat, 3, 1, y);
-        vmathM4SetElem(&q_sprite->model_mat, 3, 1, y);
-        // printf("x:%f\n",x);
+	// float y = vmathM4GetElem(&v_mat, 3, 1);
+	float y = vmathM4GetElem(&q_sprite->model_mat, 3, 1);
+	y += 10.1;
+	// vmathM4SetElem(&v_mat, 3, 1, y);
+	vmathM4SetElem(&q_sprite->model_mat, 3, 1, y);
+	// printf("x:%f\n",x);
     }
     if (d == 1) {
-        //float y = vmathM4GetElem(&v_mat, 3, 1);
-        float y = vmathM4GetElem(&q_sprite->model_mat, 3, 1);
-        y -= 10.1;
-        //vmathM4SetElem(&v_mat, 3, 1, y);
-        vmathM4SetElem(&q_sprite->model_mat, 3, 1, y);
-        // printf("x:%f\n",x);
+	// float y = vmathM4GetElem(&v_mat, 3, 1);
+	float y = vmathM4GetElem(&q_sprite->model_mat, 3, 1);
+	y -= 10.1;
+	// vmathM4SetElem(&v_mat, 3, 1, y);
+	vmathM4SetElem(&q_sprite->model_mat, 3, 1, y);
+	// printf("x:%f\n",x);
     }
 }
 
@@ -97,15 +99,18 @@ void variable_render(double alpha) {
     vmathM4GetData(&p_mat);
 
     glUniformMatrix4fv(m_mat_loc, 1, GL_FALSE,
-                       vmathM4GetData(&q_sprite->model_mat));
+		       vmathM4GetData(&q_sprite->model_mat));
     glUniformMatrix4fv(p_mat_loc, 1, GL_FALSE, vmathM4GetData(&p_mat));
     glUniformMatrix4fv(v_mat_loc, 1, GL_FALSE, vmathM4GetData(&v_mat));
 
-     //vmathM4Prints(&p_mat, "proj");
-     //vmathM4Prints(&v_mat, "view");
-     //vmathM4Prints(&q_sprite->model_mat, "model");
+    glActiveTexture(GL_TEXTURE0);
+    glUniform1i(tex_loc, 0);
+    glBindTexture(GL_TEXTURE_2D, q_sprite->texture_id);
+    //printf("tex:%d\n", tex_loc);
 
-     //vmathM4Prints(&q_sprite->model_mat, "model");
+    // vmathM4Prints(&p_mat, "proj");
+    // vmathM4Prints(&v_mat, "view");
+    // vmathM4Prints(&q_sprite->model_mat, "model");
 
     sprite_bind_render(q_sprite);
 }
@@ -117,23 +122,37 @@ void pause(void) {}
 void resume(void) {}
 
 void handle_events(key_event* e) {
-    if(e->k_action == GLFW_PRESS) {
-        //printf("pressed\n");
-        if(e->k_key == GLFW_KEY_LEFT) {
-            l = 1;
-        }
-        if(e->k_key == GLFW_KEY_RIGHT) {
-            r = 1;
-        }
-        if(e->k_key == GLFW_KEY_UP) {
-            u = 1;
-        }
-        if(e->k_key == GLFW_KEY_DOWN) {
-            d = 1;
-        }
-    } else if (e->k_action == GLFW_RELEASE) {
-        l = r = u = d = -1;
-        //printf("released\n");
+    if (e->k_action == GLFW_PRESS) {
+	// printf("pressed\n");
+	if (e->k_key == GLFW_KEY_LEFT) {
+	    l = 1;
+	}
+	if (e->k_key == GLFW_KEY_RIGHT) {
+	    r = 1;
+	}
+	if (e->k_key == GLFW_KEY_UP) {
+	    u = 1;
+	}
+	if (e->k_key == GLFW_KEY_DOWN) {
+	    d = 1;
+	}
+    } 
+
+    if (e->k_action == GLFW_RELEASE) {
+	if (e->k_key == GLFW_KEY_LEFT) {
+	    l = -1;
+	}
+	if (e->k_key == GLFW_KEY_RIGHT) {
+	    r = -1;
+	}
+	if (e->k_key == GLFW_KEY_UP) {
+	    u = -1;
+	}
+	if (e->k_key == GLFW_KEY_DOWN) {
+	    d = -1;
+	}
+	//l = r = u = d = -1;
+	// printf("released\n");
     }
 }
 

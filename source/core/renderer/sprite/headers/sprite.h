@@ -4,6 +4,7 @@
 #include "glad.h"
 #include "mesh.h"
 #include "vectormath_aos.h"
+#include "texture.h"
 
 typedef struct {
     mesh* sprite_mesh;
@@ -17,7 +18,7 @@ typedef struct {
     GLuint sprite_mesh_vao_handle;
 } sprite;
 
-sprite* sprite_new_ptr(float w, float h, float x, float y);
+sprite* sprite_new_ptr(texture *t, float x, float y);
 GLuint sprite_get_vertex_buffer_handle(sprite* in);
 GLuint sprite_get_index_buffer_handle(sprite* in);
 void sprite_bind_render(sprite* out);

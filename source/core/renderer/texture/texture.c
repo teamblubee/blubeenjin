@@ -39,7 +39,6 @@ texture* texture_new_ptr(char* filename) {
                  0, out->texture_format, GL_UNSIGNED_BYTE, out->data);
 
     glGenerateMipmap(GL_TEXTURE_2D);
-
     glBindTexture(GL_TEXTURE_2D, 0);
 
     free(f_path);
