@@ -1,6 +1,8 @@
 #ifndef RESOURCE_UTILS_H
 #define RESOURCE_UTILS_H
 
+#include "stb_img.h"
+
 void init_resource_path(char* path);
 void cleanup_resource_path(void);
 

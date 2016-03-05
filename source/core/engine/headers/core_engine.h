@@ -8,6 +8,8 @@
 #include "mesh.h"
 #include "shader.h"
 #include "sprite.h"
+#include "image.h"
+#include "texture.h"
 
 typedef struct {
     GLFWwindow *k_window;

@@ -1467,6 +1467,11 @@ static inline void vmathM3Prints(const VmathMatrix3 *mat, const char *name);
 
 
 /*
+ * Get 4x4 matrix data
+ */
+static float* vmathM4GetData(VmathMatrix4* in);
+
+/*
  * Copy a 4x4 matrix
  */
 static inline void vmathM4Copy(VmathMatrix4 *result, const VmathMatrix4 *mat);

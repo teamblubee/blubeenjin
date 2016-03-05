@@ -3,6 +3,7 @@
 #include <string.h>
 #include "resource_utils.h"
 
+
 char* resource_dir;
 char* savedata_dir;
 
