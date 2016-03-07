@@ -13,14 +13,6 @@ out vec4 f_color;
 out vec2 f_tex;
 
 void main() {
-    //gl_Position = vec4(a_pos, 1.0);//u_mvp_mat * vec4(a_pos, 1.0);
-    //gl_Position = u_proj_mat * u_view_mat * u_mod_mat * vec4(a_pos, 1.0);
-    //gl_Position = u_mvp_mat * vec4(a_pos, 1.0);
-    //gl_Position = u_proj_mat * u_view_mat * u_mod_mat * vec4(a_pos, 1.0);
-    //gl_Position = u_proj_mat * u_view_mat * vec4(a_pos, 1.0);
-    //gl_Position = u_mvp_mat * vec4(a_pos, 1.0);
-
-
     gl_Position =  u_proj_mat * u_view_mat * u_mod_mat * vec4(a_pos, 1.0);
     f_tex = a_tex;
     f_color = a_col;

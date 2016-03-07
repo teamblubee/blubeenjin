@@ -77,10 +77,9 @@ sprite* sprite_new_ptr(texture* t, float x, float y) {
     vmathM4SetElem(&out->model_mat, 1, 1, out->scale.y);
     vmathM4SetElem(&out->model_mat, 2, 2, 1);
     vmathM4SetElem(&out->model_mat, 3, 3, 1);
-    // vmathM4MakeScale(&out->model_mat, &out->scale);
-    vmathM4SetElem(&out->model_mat, 3, 0, (-out->scale.x) - (x));
+
+    vmathM4SetElem(&out->model_mat, 3, 0, (out->scale.x) + (x));
     vmathM4SetElem(&out->model_mat, 3, 1, (out->scale.y) + (y));
-    // vmathM4Prints(&out->model_mat, "model");
 
     bind_vertex_data(out);
     bind_index_data(out);
@@ -97,8 +96,8 @@ GLuint sprite_get_index_buffer_handle(sprite* in) {
 }
 
 sprite* sprite_set_z_index(sprite* out, int index) {
-   out->z_index = index;
-   return out;
+    out->z_index = index;
+    return out;
 }
 
 sprite* sprite_set_position(sprite* out, float x, float y) {
