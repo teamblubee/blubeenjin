@@ -72,14 +72,10 @@ sprite* sprite_new_ptr(texture* t, float x, float y) {
 
     vertex_layout_cleanup(sprite_vl);
 
-    vmathV3MakeFromElems(&out->scale, t->width * 0.5f, t->height * 0.5f, 1);
-    vmathM4SetElem(&out->model_mat, 0, 0, out->scale.x);
-    vmathM4SetElem(&out->model_mat, 1, 1, out->scale.y);
-    vmathM4SetElem(&out->model_mat, 2, 2, 1);
-    vmathM4SetElem(&out->model_mat, 3, 3, 1);
+    vmathV3MakeFromElems(&out->piv, t->width*0.5f, t->height*0.5f, 1.0);
+    vmathV3MakeFromElems(&out->scale, out->piv.x, out->piv.y, out->piv.z);
 
-    vmathM4SetElem(&out->model_mat, 3, 0, (out->scale.x) + (x));
-    vmathM4SetElem(&out->model_mat, 3, 1, (out->scale.y) + (y));
+    vmathM4MakeScale(&out->model_mat, &out->scale);
 
     bind_vertex_data(out);
     bind_index_data(out);
@@ -106,7 +102,17 @@ sprite* sprite_set_position(sprite* out, float x, float y) {
     return out;
 }
 
+sprite* sprite_add_position(sprite* out, float x, float y) {
+    vmathV3Copy(&out->p_pos, &out->pos);
+    vmathV3MakeFromElems(&out->pos, out->pos.x + x, out->pos.y + y, out->z_index);
+    return out;
+}
+
 void sprite_bind_render(sprite* out, shader_fx* s, GLuint tex_loc) {
+    vmathM4SetElem(&out->model_mat, 3, 0, (out->scale.x) + (out->pos.x));
+    vmathM4SetElem(&out->model_mat, 3, 1, (out->scale.y) + (out->pos.y));
+
+
     shader_bind_program(s);
     glActiveTexture(GL_TEXTURE0);
     glUniform1i(tex_loc, 0);

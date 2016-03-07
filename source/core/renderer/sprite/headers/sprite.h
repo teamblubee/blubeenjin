@@ -10,6 +10,7 @@
 typedef struct {
     mesh* sprite_mesh;
     mat4 model_mat;
+    vec3 p_piv,piv;
     vec3 p_pos,pos;
     vec3 p_rot,rot;
     vec3 p_scale,scale;
@@ -25,6 +26,7 @@ GLuint sprite_get_vertex_buffer_handle(sprite* in);
 GLuint sprite_get_index_buffer_handle(sprite* in);
 sprite* sprite_set_z_index(sprite* out, int index);
 sprite* sprite_set_position(sprite* out, float x, float y);
+sprite* sprite_add_position(sprite* out, float x, float y);
 void sprite_bind_render(sprite* out, shader_fx* s, GLuint tex_loc);
 void sprite_cleanup(sprite* in);
 

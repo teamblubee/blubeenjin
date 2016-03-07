@@ -20,19 +20,19 @@ void init(void) {
 
     dtex = texture_new_ptr("dino.png");
     btex = texture_new_ptr("background.jpg");
-    // btex = texture_new_ptr("safe_zone.png");
-    // bkg = sprite_new_ptr(btex, -180, -80);
+
+
+    shader = shader_create_from_file("default.vert", "default.frag");
 
     bkg = sprite_new_ptr(btex, 0, 0);
     q_sprite = sprite_new_ptr(dtex, 0, 0);
 
-    shader = shader_create_from_file("default.vert", "default.frag");
 
 
     glViewport(0, 0, width, height);
     point3 eye, center;
     vec3 up;
-    vmathP3MakeFromElems(&eye, 0, 0, 1);
+    vmathP3MakeFromElems(&eye, 0, 0, 0);
     vmathP3MakeFromElems(&center, 0, 0, -1);
     vmathV3MakeFromElems(&up, 0, 1, 0);
     vmathM4MakeLookAt(&v_mat, &eye, &center, &up);
@@ -54,23 +54,26 @@ void fixed_update(void) {
     if (l == 1) {
         float x = vmathM4GetElem(&q_sprite->model_mat, 3, 0);
         x -= 10.1;
-        sprite_set_position(q_sprite, x, 0);
-        vmathM4SetElem(&q_sprite->model_mat, 3, 0, x);
+        sprite_add_position(q_sprite, -10, 0);
+        //vmathM4SetElem(&q_sprite->model_mat, 3, 0, x);
     }
     if (r == 1) {
         float x = vmathM4GetElem(&q_sprite->model_mat, 3, 0);
         x += 10.1;
-        vmathM4SetElem(&q_sprite->model_mat, 3, 0, x);
+        sprite_add_position(q_sprite, 10, 0);
+        //vmathM4SetElem(&q_sprite->model_mat, 3, 0, x);
     }
     if (u == 1) {
         float y = vmathM4GetElem(&q_sprite->model_mat, 3, 1);
         y += 10.1;
-        vmathM4SetElem(&q_sprite->model_mat, 3, 1, y);
+        sprite_add_position(q_sprite, 0, +10);
+        //vmathM4SetElem(&q_sprite->model_mat, 3, 1, y);
     }
     if (d == 1) {
         float y = vmathM4GetElem(&q_sprite->model_mat, 3, 1);
         y -= 10.1;
-        vmathM4SetElem(&q_sprite->model_mat, 3, 1, y);
+        sprite_add_position(q_sprite, 0, -10);
+        //vmathM4SetElem(&q_sprite->model_mat, 3, 1, y);
     }
 
     if (cl == 1) {
@@ -118,8 +121,9 @@ void variable_render(double alpha) {
     sprite_bind_render(q_sprite, shader, tex_loc);
 
     // vmathM4Prints(&p_mat, "proj");
-    vmathM4Prints(&v_mat, "view");
-    vmathM4Prints(&q_sprite->model_mat, "model");
+    //vmathM4Prints(&v_mat, "view");
+    //vmathM4Prints(&q_sprite->model_mat, "model");
+    vmathV3Prints(&q_sprite->pos, "position");
 }
 
 void resize(int w, int h) {
