@@ -110,7 +110,7 @@ static int ce_run_game() {
         }
 
         double alpha = accum / delta_time;
-        // state = current_state * alpha + prev_state * (1.0 - alpha);
+        // state = current_state_x * alpha + prev_state_x * (1.0 - alpha);
         ce_var_update(alpha);
         ce_render(alpha);
 

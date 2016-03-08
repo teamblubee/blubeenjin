@@ -14,20 +14,15 @@ int l, r, u, d;
 int cl, cr, cu, cd;
 image* dino;
 texture* dtex, *btex;
-float al = 0.0f;
 
 void init(void) {
-
     dtex = texture_new_ptr("dino.png");
     btex = texture_new_ptr("background.jpg");
-
 
     shader = shader_create_from_file("default.vert", "default.frag");
 
     bkg = sprite_new_ptr(btex, 0, 0);
     q_sprite = sprite_new_ptr(dtex, 0, 0);
-
-
 
     glViewport(0, 0, width, height);
     point3 eye, center;
@@ -41,8 +36,22 @@ void init(void) {
     vmathV3MakeFromElems(&trans, -width / 2, -height / 2, 0);
     vmathM4MakeTranslation(&v_mat, &trans);
 
-    vmathM4MakeOrthographic(&p_mat, -width / 2, width / 2, -height / 2,
-                            height / 2, 0, 100);
+    // vmathM4MakeOrthographic(&p_mat, -width / 2, width / 2, -height / 2,
+    // height / 2, 0, 100);
+
+    if (width >= height) {
+        // aspect >= 1, set the height from -1 to 1, with larger width
+        // gluOrtho2D(-1.0 * aspect, 1.0 * aspect, -1.0, 1.0);
+        vmathM4MakeOrthographic(&p_mat, (-width / 2) * aspect,
+                                (width / 2) * aspect, -height / 2, height / 2,
+                                0, 100);
+    } else {
+        // aspect < 1, set the width to -1 to 1, with larger height
+        // gluOrtho2D(-1.0, 1.0, -1.0 / aspect, 1.0 / aspect);
+        vmathM4MakeOrthographic(&p_mat, -width / 2, width / 2,
+                                (-height / 2) * aspect, (height / 2) * aspect,
+                                0, 100);
+    }
 
     m_mat_loc = shader_get_uniform_location(shader, "u_mod_mat");
     v_mat_loc = shader_get_uniform_location(shader, "u_view_mat");
@@ -52,28 +61,16 @@ void init(void) {
 
 void fixed_update(void) {
     if (l == 1) {
-        float x = vmathM4GetElem(&q_sprite->model_mat, 3, 0);
-        x -= 10.1;
-        sprite_add_position(q_sprite, -10, 0);
-        //vmathM4SetElem(&q_sprite->model_mat, 3, 0, x);
+        sprite_add_position(q_sprite, -20.0f, 0);
     }
     if (r == 1) {
-        float x = vmathM4GetElem(&q_sprite->model_mat, 3, 0);
-        x += 10.1;
-        sprite_add_position(q_sprite, 10, 0);
-        //vmathM4SetElem(&q_sprite->model_mat, 3, 0, x);
+        sprite_add_position(q_sprite, 20.0f, 0);
     }
     if (u == 1) {
-        float y = vmathM4GetElem(&q_sprite->model_mat, 3, 1);
-        y += 10.1;
-        sprite_add_position(q_sprite, 0, +10);
-        //vmathM4SetElem(&q_sprite->model_mat, 3, 1, y);
+        sprite_add_position(q_sprite, 0, 20.0f);
     }
     if (d == 1) {
-        float y = vmathM4GetElem(&q_sprite->model_mat, 3, 1);
-        y -= 10.1;
-        sprite_add_position(q_sprite, 0, -10);
-        //vmathM4SetElem(&q_sprite->model_mat, 3, 1, y);
+        sprite_add_position(q_sprite, 0, -20.0f);
     }
 
     if (cl == 1) {
@@ -102,7 +99,8 @@ void fixed_update(void) {
     }
 }
 
-void variable_update(double alpha) { al = alpha; }
+void variable_update(double alpha) {
+}
 
 void variable_render(double alpha) {
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
@@ -112,21 +110,36 @@ void variable_render(double alpha) {
     glUniformMatrix4fv(v_mat_loc, 1, GL_FALSE, vmathM4GetData(&v_mat));
 
     // render bg
-    glUniformMatrix4fv(m_mat_loc, 1, GL_FALSE, vmathM4GetData(&bkg->model_mat));
-    sprite_bind_render(bkg, shader, tex_loc);
+    sprite_bind_render(bkg, shader, tex_loc, m_mat_loc, alpha);
 
     // render dino
-    glUniformMatrix4fv(m_mat_loc, 1, GL_FALSE,
-                       vmathM4GetData(&q_sprite->model_mat));
-    sprite_bind_render(q_sprite, shader, tex_loc);
+    sprite_bind_render(q_sprite, shader, tex_loc, m_mat_loc, alpha);
 
     // vmathM4Prints(&p_mat, "proj");
-    //vmathM4Prints(&v_mat, "view");
-    //vmathM4Prints(&q_sprite->model_mat, "model");
-    vmathV3Prints(&q_sprite->pos, "position");
+    // vmathM4Prints(&v_mat, "view");
+    // vmathM4Prints(&q_sprite->model_mat, "model");
+    // vmathV3Prints(&q_sprite->pos, "position");
 }
 
 void resize(int w, int h) {
+    if (h == 0) h = 1;  // To prevent divide by 0
+    GLfloat a = (GLfloat)w / (GLfloat)h;
+
+    // Set the viewport to cover the new window
+    glViewport(0, 0, w, h);
+
+    // Set the aspect ratio of the clipping area to match the viewport
+    if (w >= h) {
+        // aspect >= 1, set the height from -1 to 1, with larger width
+        // gluOrtho2D(-1.0 * aspect, 1.0 * aspect, -1.0, 1.0);
+        vmathM4MakeOrthographic(&p_mat, (-w / 2) , (w / 2) , -h / 2,
+                                h / 2, 0, 100);
+    } else {
+        // aspect < 1, set the width to -1 to 1, with larger height
+        // gluOrtho2D(-1.0, 1.0, -1.0 / aspect, 1.0 / aspect);
+        vmathM4MakeOrthographic(&p_mat, -w / 2, w / 2, (-h / 2) * a,
+                                (h / 2) * a, 0, 100);
+    }
 }
 
 void pause(void) {}
@@ -226,6 +239,6 @@ int main(int argv, char* argc[]) {
     // height = 1280;
     aspect = width / height;
 
-    ce_init(width, height, "test title", 60.0, ptrs, argc[0]);
+    ce_init(width, height, "test title", 10.0, ptrs, argc[0]);
     return 0;
 }
