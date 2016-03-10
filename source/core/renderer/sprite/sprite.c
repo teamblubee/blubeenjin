@@ -115,15 +115,15 @@ void sprite_bind_render(sprite* out, shader_fx* s, GLuint tex_loc, GLuint m_mat_
 
     tx = (out->pos.x * al) + (out->p_pos.x * (1.0f - al));
     ty = (out->pos.y * al) + (out->p_pos.y * (1.0f - al));
-    printf("interpolated x:%f interpolated y:%f\n",tx, ty);
+    //printf("interpolated x:%f interpolated y:%f\n",tx, ty);
     out->p_pos.x = tx;
     out->p_pos.y = ty;
 
     vmathM4SetElem(&out->model_mat, 3, 0, (out->scale.x) + (tx));
     vmathM4SetElem(&out->model_mat, 3, 1, (out->scale.y) + (ty));
 
-    vmathV3Prints(&out->p_pos, "prev");
-    vmathV3Prints(&out->pos, "pos");
+    //vmathV3Prints(&out->p_pos, "prev");
+    //vmathV3Prints(&out->pos, "pos");
 
     shader_bind_program(s);
     glActiveTexture(GL_TEXTURE0);

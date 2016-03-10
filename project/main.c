@@ -14,6 +14,8 @@ int l, r, u, d;
 int cl, cr, cu, cd;
 image* dino;
 texture* dtex, *btex;
+float x = 30;
+float y = 30;
 
 void init(void) {
     dtex = texture_new_ptr("dino.png");
@@ -73,6 +75,21 @@ void fixed_update(void) {
         sprite_add_position(q_sprite, 0, -20.0f);
     }
 
+    if (q_sprite->pos.x + (q_sprite->scale.x*2) >= width ) {
+        x = -x;
+    }
+    if (q_sprite->pos.x < 0) {
+        x = -x;
+    }
+    if (q_sprite->pos.y  + (q_sprite->scale.y*2) >= height) {
+        y = -y;
+    }
+    if (q_sprite->pos.y < 0) {
+        y = -y;
+    }
+
+    sprite_add_position(q_sprite, x, y);
+
     if (cl == 1) {
         float x = vmathM4GetElem(&v_mat, 3, 0);
         x += 10.1;
@@ -99,8 +116,7 @@ void fixed_update(void) {
     }
 }
 
-void variable_update(double alpha) {
-}
+void variable_update(double alpha) {}
 
 void variable_render(double alpha) {
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
@@ -132,8 +148,8 @@ void resize(int w, int h) {
     if (w >= h) {
         // aspect >= 1, set the height from -1 to 1, with larger width
         // gluOrtho2D(-1.0 * aspect, 1.0 * aspect, -1.0, 1.0);
-        vmathM4MakeOrthographic(&p_mat, (-w / 2) , (w / 2) , -h / 2,
-                                h / 2, 0, 100);
+        vmathM4MakeOrthographic(&p_mat, (-w / 2), (w / 2), -h / 2, h / 2, 0,
+                                100);
     } else {
         // aspect < 1, set the width to -1 to 1, with larger height
         // gluOrtho2D(-1.0, 1.0, -1.0 / aspect, 1.0 / aspect);
