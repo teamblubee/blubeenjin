@@ -38,11 +38,11 @@ flags = [
 ]
 
 
-def AddDirsRecursively():                
+def AddDirsRecursively():
 
-  global flags                                                                                                         
+  global flags
   new_flags = []
-  for dirname, dirnames, filenames in os.walk('/home/blubee/sdk/blubeenjin/source'):
+  for dirname, dirnames, filenames in os.walk(os.environ.get("BLUBEENJIN_DIR", 0)):
       for subdirname in dirnames:
           if("include" in subdirname):
              new_flags.append('-I')
